@@ -59,7 +59,7 @@ def trainNG(
     labelsID = processNewick(newick, nGroup, name='trainNG')
     data = pd.merge(data, labelsID, left_index=True, right_index=True)
 
-    y = data.pop('testNG')
+    y = data.pop('trainNG')
     X = data[featureCols]
 
     transformers = ([('categories', FunctionTransformer(), featureCols)])
