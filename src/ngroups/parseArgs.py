@@ -6,7 +6,7 @@ import sys
 import logging
 import argparse
 from timeit import default_timer as timer
-from .main import splitTestTrain, trainNG, testNG, runNG, downloadExample
+from .main import splitTestTrain, trainNG, testNG, runNG, downloadExample, downloadModel
 from ._version import __version__
 
 
@@ -38,6 +38,21 @@ def parseArgs() -> argparse.Namespace:
     sp1.add_argument(
         '--trainSize', type=float, default=0.8,
         help='Proportion of data to use as training (default: %(default)s)')
+    sp1.add_argument(
+        '--seed', type=int, default=42,
+        help='Seed for reproducing train/test split (default: %(default)s)')
+    sp1.add_argument(
+        '--missingVal', default='unknown',
+        help='Value to replace missing data (default: %(default)s)')
+    sp1.add_argument(
+        '--IDcol', type=int, default=0,
+        help='Column index (zero-based) of data corresponding to '
+             'isolate ID (default: %(default)s)')
+    sp1.add_argument(
+        '--features', type=int, nargs="+",
+        help='Column indices (zero-based) of training features. If not '
+             'provided, all columns except index 0 are assumed to be '
+             'training features')
     sp1.set_defaults(function=splitTestTrain)
 
     sp2 = subparser.add_parser(
@@ -54,6 +69,14 @@ def parseArgs() -> argparse.Namespace:
         '--nGroup', type=int, default=20,
         help='Number of Neighbour Groups to define '
              'from tree (default: %(default)s)')
+    sp2.add_argument(
+        '--full', action='store_true',
+        help='Train model using full dataset instead of '
+             'training subset (default: %(default)s)')
+    sp2.add_argument(
+        '--seed', type=int, default=42,
+        help='Seed for defining random state of '
+             'classifer (default: %(default)s)')
     sp2.set_defaults(function=trainNG)
 
     sp3 = subparser.add_parser(
@@ -81,14 +104,14 @@ def parseArgs() -> argparse.Namespace:
     sp4.set_defaults(function=runNG)
 
     sp5 = subparser.add_parser(
-        'getExample',
+        'getData',
         description=downloadExample.__doc__,
         help='Download example data.',
         parents=[baseParser],
         epilog=parser.epilog)
-    sp4.add_argument(
-        'path', default='.'
-        help='Directory to save example data.')
+    sp5.add_argument(
+        '--dir', default='.',
+        help='Directory to save example data (default: %(default)s)')
     sp5.set_defaults(function=downloadExample)
 
     sp6 = subparser.add_parser(
@@ -98,8 +121,8 @@ def parseArgs() -> argparse.Namespace:
         parents=[baseParser],
         epilog=parser.epilog)
     sp6.add_argument(
-        'path', default='.'
-        help='Directory to save example data.')
+        '--dir', default='.',
+        help='Directory to save model (default: %(default)s)')
     sp6.set_defaults(function=downloadModel)
 
     args = parser.parse_args()
