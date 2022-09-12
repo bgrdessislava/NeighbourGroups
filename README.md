@@ -18,7 +18,7 @@ pip install git+https://github.com/bgrdessislava/NeighbourGroups.git
 Neighbour Groups can be run from the command line and additional help is provided via ```ngroups --help```.
 
 ### 1. Download Publication Data
-The publication data can be download using the command below or obtained directly from the [GitHub repository](https://github.com/bgrdessislava/NeighbourGroups/tree/main/data).
+The publication data can be downloaded as below or obtained directly from the [GitHub repository](https://github.com/bgrdessislava/NeighbourGroups/tree/main/data).
 The following command will download the data and save it to the directory `./analysis`.
 
 ```bash
@@ -32,7 +32,7 @@ For example, below each output file is prefixed with `./analysis/example` (e.g. 
 *The prefix should be kept the same through a given analysis workflow.*
 
 ```bash
-ngroups prepare analysis/example analysis/C.jejuni-UKisolates.csv  --trainSize 0.8 --seed 42
+ngroups prepare analysis/example analysis/C.jejuni-UKisolates.csv --trainSize 0.8 --seed 42
 ```
 
 If required, the user can specify which column indexes (zero-based) correspond to the isolate ID and which correspond to the relevant training features.
