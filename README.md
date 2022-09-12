@@ -14,9 +14,6 @@
 pip install git+https://github.com/bgrdessislava/NeighbourGroups.git
 ```
 
-## Configuration
-TBC
-
 ## Usage
 Neighbour Groups can be run from the command line and additional help is provided via ```ngroups --help```.
 
