@@ -37,15 +37,11 @@ setup(
     },
     python_requires='>=3.8.0',
     install_requires=[
-        'pyyaml',
+        'ete3',
         'numpy',
         'pandas',
-        'networkx',
-        'matplotlib',
-        'pyvis',
-        'scipy',
-        'python-louvain',
-        'statsmodels'
+        'catboost',
+        'scikit-learn',
     ],
     license='MIT',
     classifiers=[
