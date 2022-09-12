@@ -9,14 +9,13 @@ import logging
 import pandas as pd
 from sklearn.pipeline import Pipeline
 from catboost import CatBoostClassifier
-from scipy.cluster.hierarchy import fcluster
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.metrics.cluster import adjusted_rand_score
 
 def splitTestTrain(
-        data: str, prefix: str, IDcol: int = 0, features: list = None,
+        prefix: str, data: str, IDcol: int = 0, features: list = None,
         missingVal: str = 'unknown', trainSize: float  = 0.8, seed: int = 42):
     if not (0 < trainSize < 1):
         logging.error(f'--trainSize {trainSize} not in range (0, 1).')
@@ -47,7 +46,7 @@ def splitTestTrain(
 
 
 def trainNG(
-        newick: str, prefix: str, nGroup: int = 20,
+        prefix: str, newick: str, nGroup: int = 20,
         full: bool = False, seed: int = 42):
     if nGroup < 2:
         logging.error(f'--nGroup {nGroup} must be 2 or more.')
@@ -75,7 +74,7 @@ def trainNG(
     writeModel(prefix, model)
 
 
-def testNG(newick: str, prefix: str):
+def testNG(prefix: str, newick: str):
     # Read test data to extract isolate IDs
     testIsolates = pd.read_csv(f'{prefix}-test.csv')['id']
     # Read full data and set a test column

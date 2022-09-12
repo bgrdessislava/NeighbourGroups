@@ -7,7 +7,7 @@ import requests
 import pandas as pd
 from ete3 import ClusterTree
 from scipy.spatial.distance import pdist
-from scipy.cluster.hierarchy import linkage
+from scipy.cluster.hierarchy import linkage, fcluster
 
 
 def download(url: str, dir: str):

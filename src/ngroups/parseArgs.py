@@ -32,9 +32,9 @@ def parseArgs() -> argparse.Namespace:
         parents=[baseParser],
         epilog=parser.epilog)
     sp1.add_argument(
-        'data', help='Path to data file in .csv format')
-    sp1.add_argument(
         'prefix', help='File prefix to read/write data.')
+    sp1.add_argument(
+        'data', help='Path to data file in .csv format')
     sp1.add_argument(
         '--trainSize', type=float, default=0.8,
         help='Proportion of data to use as training (default: %(default)s)')
@@ -62,9 +62,9 @@ def parseArgs() -> argparse.Namespace:
         parents=[baseParser],
         epilog=parser.epilog)
     sp2.add_argument(
-        'newick', help='Path to newick file of the training dataset.')
-    sp2.add_argument(
         'prefix', help='File prefix to read/write data.')
+    sp2.add_argument(
+        'newick', help='Path to newick file of the training dataset.')
     sp2.add_argument(
         '--nGroup', type=int, default=20,
         help='Number of Neighbour Groups to define '
@@ -86,9 +86,9 @@ def parseArgs() -> argparse.Namespace:
         parents=[baseParser],
         epilog=parser.epilog)
     sp3.add_argument(
-        'newick', help='Path to newick file of the full dataset.')
-    sp3.add_argument(
         'prefix', help='File prefix to read/write data.')
+    sp3.add_argument(
+        'newick', help='Path to newick file of the full dataset.')
     sp3.set_defaults(function=testNG)
 
     sp4 = subparser.add_parser(
