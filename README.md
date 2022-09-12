@@ -25,7 +25,7 @@ The following command will download the data and save it to the directory `./ana
 ngroups getData --dir analysis
 ```
 
-### 2. Split Data - train/test
+### 2. Split Training and Testing Data
 The following command splits the example data into a training and testing data set.
 The first argument of most `ngroups` commands is the `prefix` - this defines the directory and filename prefix of Neighbour Groups outputs
 For example, below each output file is prefixed with `./analysis/example` (e.g. `./analysis/example-test.csv`).
