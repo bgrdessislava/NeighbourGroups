@@ -3,10 +3,7 @@
 ## Table of contents
 
   * [Installation](#installation)
-  * [Configuration](#configuration)
   * [Usage](#usage)
-  * [Example output](#example-output)
-  * [References](#references)
 
 ## Installation
 
