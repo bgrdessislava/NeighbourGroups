@@ -5,7 +5,15 @@
   * [Installation](#installation)
   * [Usage](#usage)
     * [1. Download Publication Data](#1-download-publication-data)
+    * [2. Split Training and Testing Data](#2-split-training-and-testing-data)
+    * [3. Build Phylogenetic Tree](#3-build-phylogenetic-tree)
+    * [4. Pre-process the Trees](#4-pre-process-the-trees)
+    * [5. Training the Model](#5-training-the-model)
+    * [6. Testing the Model](#6-testing-the-model)
+    * [7. Re-train model with Full Data](#7-re-train-model-with-full-data)
+    * [8. Using the Model](#8-using-the-model)
 
+    
 ## Installation
 
 ```bash
@@ -100,7 +108,7 @@ In addition, a final CSV final will be written to `{prefix}-{nGroup}-final.csv` 
 ngroups train analysis/example 20 --full --seed 42
 ```
 
-### 8. Use the Model
+### 8. Using the Model
 Now the classifier is trained, it can be used on other data.
 The `ngroups predict` command requires a path to a CSV of data the trained model.
 
