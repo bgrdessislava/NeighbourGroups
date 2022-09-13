@@ -110,7 +110,7 @@ def parseArgs() -> argparse.Namespace:
         'data', help='Path to data file in .csv format')
     sp4.add_argument(
         'model', help='Path to trained NeighbourGroup model.')
-    sp1.add_argument(
+    sp4.add_argument(
         '--col', default='NG',
         help='Column name to write predictions (default: %(default)s)')
     sp4.set_defaults(function=runNG)
