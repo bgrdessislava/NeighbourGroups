@@ -92,7 +92,7 @@ ngroups test analysis/example > adjustedRandScores.csv
 
 ### 7. Re-train model with Full Data
 Following testing, the model can be retrained using the full dataset.
-To retrain the mdel re-run the `ngroups train` command from step 5 with an additional `--full` flag.
+To retrain the model re-run the `ngroups train` command from step 5 with an additional `--full` flag.
 This will output a final trained model at the location `{prefix}-{nGroup}-final-trained.pkl`.
 For example, in the following command the model will be written to `./analysis/example-20-final-trained.pkl`
 
