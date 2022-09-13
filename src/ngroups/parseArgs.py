@@ -6,7 +6,7 @@ import sys
 import logging
 import argparse
 from timeit import default_timer as timer
-from .main import splitTestTrain, trainNG, testNG, runNG, downloadExample, downloadModel
+from .main import splitTestTrain, prepTree, trainAll, testAll, runNG, downloadExample, downloadModel
 from ._version import __version__
 
 
@@ -55,20 +55,31 @@ def parseArgs() -> argparse.Namespace:
              'training features')
     sp1.set_defaults(function=splitTestTrain)
 
+    sp7 = subparser.add_parser(
+        'tree',
+        description=runNG.__doc__,
+        help='Pre-process the Newick trees.',
+        parents=[baseParser],
+        epilog=parser.epilog)
+    sp7.add_argument(
+        'prefix', help='File prefix to read/write data.')
+    sp7.add_argument(
+        'fullTree', help='Path to full tree in newick format.')
+    sp7.add_argument(
+        'trainTree', help='Path to training tree in newick format.')
+    sp7.set_defaults(function=prepTree)
+
     sp2 = subparser.add_parser(
         'train',
-        description=trainNG.__doc__,
+        description=trainAll.__doc__,
         help='Train the CatBoost classifer.',
         parents=[baseParser],
         epilog=parser.epilog)
     sp2.add_argument(
         'prefix', help='File prefix to read/write data.')
     sp2.add_argument(
-        'newick', help='Path to newick file of the training dataset.')
-    sp2.add_argument(
-        '--nGroup', type=int, default=20,
-        help='Number of Neighbour Groups to define '
-             'from tree (default: %(default)s)')
+        'nGroup', type=int, nargs='+',
+        help='Number of Neighbour Groups to classify.')
     sp2.add_argument(
         '--full', action='store_true',
         help='Train model using full dataset instead of '
@@ -77,19 +88,17 @@ def parseArgs() -> argparse.Namespace:
         '--seed', type=int, default=42,
         help='Seed for defining random state of '
              'classifer (default: %(default)s)')
-    sp2.set_defaults(function=trainNG)
+    sp2.set_defaults(function=trainAll)
 
     sp3 = subparser.add_parser(
         'test',
-        description=testNG.__doc__,
+        description=testAll.__doc__,
         help='Test the CatBoost classifer.',
         parents=[baseParser],
         epilog=parser.epilog)
     sp3.add_argument(
         'prefix', help='File prefix to read/write data.')
-    sp3.add_argument(
-        'newick', help='Path to newick file of the full dataset.')
-    sp3.set_defaults(function=testNG)
+    sp3.set_defaults(function=testAll)
 
     sp4 = subparser.add_parser(
         'predict',
@@ -101,6 +110,9 @@ def parseArgs() -> argparse.Namespace:
         'data', help='Path to data file in .csv format')
     sp4.add_argument(
         'model', help='Path to trained NeighbourGroup model.')
+    sp1.add_argument(
+        '--col', default='NG',
+        help='Column name to write predictions (default: %(default)s)')
     sp4.set_defaults(function=runNG)
 
     sp5 = subparser.add_parser(
