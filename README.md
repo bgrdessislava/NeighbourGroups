@@ -4,6 +4,7 @@
 
   * [Installation](#installation)
   * [Usage](#usage)
+    * [1. Download Publication Data](#1.-Download-Publication-Data)
 
 ## Installation
 
