@@ -83,6 +83,8 @@ ngroups train analysis/example 20 30 --seed 42
 ```
 
 ### 6. Testing the Model
+Following training, the `ngroups test` command can be used to assess classifier performance.
+For each Neighbour Group (e.g. 20 and 30 above) an adjusted Rand index will be computed and written to stdout.
 
 ```bash
 ngroups test analysis/example > adjustedRandScores.csv
