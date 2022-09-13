@@ -38,6 +38,7 @@ setup(
     python_requires='>=3.8.0',
     install_requires=[
         'ete3',
+        'scipy',
         'numpy',
         'pandas',
         'catboost',
