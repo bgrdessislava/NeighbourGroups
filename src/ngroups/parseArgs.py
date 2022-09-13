@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" Neighbour Groups - ML(ST) Classification """
+""" Neighbour Groups - ML Classification """
 
 import sys
 import logging
