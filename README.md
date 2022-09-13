@@ -6,14 +6,14 @@
   * [Usage](#usage)
     * [1. Download Publication Data](#1-download-publication-data)
     * [2. Split Training and Testing Data](#2-split-training-and-testing-data)
-    * [3. Build Phylogenetic Tree](#3-build-phylogenetic-tree)
+    * [3. Build Phylogenetic Trees](#3-build-phylogenetic-tree)
     * [4. Pre-process the Trees](#4-pre-process-the-trees)
     * [5. Training the Model](#5-training-the-model)
     * [6. Testing the Model](#6-testing-the-model)
-    * [7. Re-train model with Full Data](#7-re-train-model-with-full-data)
+    * [7. Re-train the Model with Full Data](#7-re-train-the-model-with-full-data)
     * [8. Using the Model](#8-using-the-model)
 
-    
+
 ## Installation
 
 ```bash
@@ -54,7 +54,7 @@ ngroups prepare analysis/example analysis/C.jejuni-UKisolates.csv \
 ```
 
 
-### 3. Build Phylogenetic Tree
+### 3. Build Phylogenetic Trees
 Following splitting of the data the user must create **two** phylogenetic trees in newick format; this step must be performed externally.
 The published methodology builds a Neighbour Joining (NJ) tree from the core MLST loci using [PubMLST](https://pubmlst.org/).
 However, in principle, any phylogenetic approach can be used.
@@ -96,7 +96,7 @@ For each Neighbour Group (e.g. 20 and 30 above) an adjusted Rand index will be c
 ngroups test analysis/example > adjustedRandScores.csv
 ```
 
-### 7. Re-train model with Full Data
+### 7. Re-train the Model with Full Data
 Following testing, the model can be retrained using the full dataset.
 To retrain the model re-run the `ngroups train` command from step 5 with an additional `--full` flag.
 This will output a final trained model at the location `{prefix}-{nGroup}-final-trained.pkl`.
