@@ -31,7 +31,7 @@ The publication data can be downloaded as below or obtained directly from the [G
 The following command will download the data and save it to the directory `./analysis`.
 
 ```bash
-ngroups getData --dir analysis
+ngroups getData --dir data
 ```
 
 
