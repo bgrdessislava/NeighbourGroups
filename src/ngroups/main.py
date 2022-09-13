@@ -8,8 +8,9 @@ import glob
 import pickle
 import logging
 import pandas as pd
+import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.metrics.cluster import adjusted_rand_score
+
 
 def splitTestTrain(
         prefix: str, data: str, IDcol: int = 0, features: list = None,
@@ -48,9 +49,10 @@ def prepTree(prefix: str, fullTree: str, trainTree: str):
         f'{prefix}-train': trainTree,
     })
     for name, tree in info.items():
-        linkageMatrix, labels = nwk2linkage(tree)
+        linkageMatrix, labels, cophenetic = nwk2linkage(tree)
         np.save(f'{name}-linkage.npy', linkageMatrix)
         np.save(f'{name}-labels.npy', labels)
+        cophenetic.to_pickle(f'{name}-cophenetic.pkl')
 
 
 def trainAll(prefix: str, nGroup: list, full: bool = False, seed: int = 42):
@@ -77,14 +79,19 @@ def testAll(prefix: str):
     # Process full tree and add fullNG labels
     linkageMatrix, labels = readTree(prefix, mode='full')
 
-    print('NeighbourGroup', 'AdjRand', sep=',')
-    models = glob.glob(f'{prefix}-*-trained.pkl')
-    for model in models:
-        nGroup = model.split('-')[-2]
-        if nGroup == 'final':
-            continue
-        adjRand = testNG(prefix, data.copy(), linkageMatrix, labels, nGroup)
-        print(nGroup, adjRand, sep=',')
+    with open(f'{prefix}-adjustedRandIndex.csv', 'w') as fh:
+        print('NeighbourGroup', 'AdjRand', sep=',', file=fh)
+        models = glob.glob(f'{prefix}-*-trained.pkl')
+        for model in models:
+            nGroup = model.split('-')[-2]
+            if nGroup == 'final':
+                continue
+            adjRand = testNG(prefix, data.copy(), linkageMatrix, labels, nGroup)
+            print(nGroup, adjRand, sep=',', file=fh)
+    # Write score to stdout
+    with open(f'{prefix}-adjustedRandIndex.csv', 'r') as fh:
+        for line in fh:
+            print(line.strip('\n'))
 
 
 def runNG(model: str, data: str, col: str = 'NG'):
@@ -95,6 +102,48 @@ def runNG(model: str, data: str, col: str = 'NG'):
     assert col not in data.columns
     data[col] = model.predict(data)
     data.to_csv(sys.stdout, index=False)
+
+
+def analyseNG(prefix: str):
+    allData = glob.glob(f'{prefix}-*-final.csv')
+    for data in allData:
+        nGroup = data.split('-')[-2]
+        data = pd.read_csv(data).astype(str).set_index('id')
+        distances = pd.read_pickle(f'{prefix}-full-cophenetic.pkl')
+        ngDistances = processNGdistances(data, distances, nGroup)
+        ngDistances.to_csv(f'{prefix}-{nGroup}-meanNGdist.csv')
+        ngDistances = (
+            ngDistances.pivot(index='NG_r', columns='NG_c').droplevel(0, axis=1)
+        )
+        fig = sns.clustermap(ngDistances, cmap='viridis')
+        ax = fig.ax_heatmap
+        ax.set_xlabel(f'Neighbour Group ({nGroup})')
+        ax.set_ylabel(f'Neighbour Group ({nGroup})')
+        fig.cax.set_visible(False)
+        fig.savefig(f'{prefix}-{nGroup}-meanNGdist.svg')
+
+
+def processNGdistances(data: pd.DataFrame, distances: pd.DataFrame, nGroup: int):
+    groupNames = data[f'NG{nGroup}-truth'].unique()
+    ngDistances = {}
+    for g1 in groupNames:
+        g1_id = data.loc[data[f'NG{nGroup}-truth'] == g1].index.tolist()
+        sub = distances[g1_id].copy()
+        for g2 in groupNames:
+            if g1 == g2:
+                ngDistances[(g1, g2)] = 0
+            else:
+                g2_id = data.loc[data[f'NG{nGroup}-truth'] == g2].index.tolist()
+                dist = sub.loc[g2_id].stack().dropna().mean()
+                ngDistances[(g1, g2)] = dist
+                ngDistances[(g2, g1)] = dist
+    ngDistances = (
+        pd.Series(ngDistances)
+        .reset_index()
+        .rename({'level_0': 'NG_r', 'level_1': 'NG_c', 0: 'distance'}, axis=1)
+        .astype({'NG_r': int, 'NG_c': int, 'distance': float})
+    )
+    return ngDistances
 
 
 def downloadExample(dir: str = '.'):

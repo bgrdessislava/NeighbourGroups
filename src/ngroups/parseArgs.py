@@ -6,7 +6,7 @@ import sys
 import logging
 import argparse
 from timeit import default_timer as timer
-from .main import splitTestTrain, prepTree, trainAll, testAll, runNG, downloadExample, downloadModel
+from .main import splitTestTrain, prepTree, trainAll, testAll, runNG, downloadExample, downloadModel, analyseNG
 from ._version import __version__
 
 
@@ -114,6 +114,15 @@ def parseArgs() -> argparse.Namespace:
         '--col', default='NG',
         help='Column name to write predictions (default: %(default)s)')
     sp4.set_defaults(function=runNG)
+
+    sp8 = subparser.add_parser(
+        'stats',
+        description=analyseNG.__doc__,
+        help='Interrogate NG relationships.',
+        parents=[baseParser],
+        epilog=parser.epilog)
+    sp8.add_argument('prefix', help='File prefix to read/write data.')
+    sp8.set_defaults(function=analyseNG)
 
     sp5 = subparser.add_parser(
         'getData',

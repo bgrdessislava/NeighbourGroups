@@ -13,7 +13,7 @@ from scipy.spatial.distance import pdist
 from sklearn.compose import ColumnTransformer
 from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.preprocessing import FunctionTransformer
-
+from sklearn.metrics.cluster import adjusted_rand_score
 
 def download(url: str, dir: str):
     if not os.path.exists(dir):
@@ -42,13 +42,12 @@ def readNewick(nwk):
 def nwk2linkage(newick: str):
     """ Convert newick tree into scipy linkage matrix """
     tree = ClusterTree(newick)
-    cophenetic_matrix, newick_labels = tree.cophenetic_matrix()
-    cophenetic_matrix = pd.DataFrame(
-        cophenetic_matrix, columns=newick_labels, index=newick_labels)
+    cophenetic, newick_labels = tree.cophenetic_matrix()
+    cophenetic = pd.DataFrame(
+        cophenetic, columns=newick_labels, index=newick_labels)
     # reduce square distance matrix to condensed distance matrices
-    pairwise_distances = pdist(cophenetic_matrix)
-    # return linkage matrix and labels
-    return linkage(pairwise_distances), np.array(cophenetic_matrix.columns)
+    pairDist = pdist(cophenetic)
+    return linkage(pairDist), np.array(cophenetic.columns), cophenetic
 
 
 def readTree(prefix: str, mode: str):

@@ -42,6 +42,7 @@ setup(
         'numpy',
         'pandas',
         'catboost',
+        'seaborn',
         'scikit-learn',
     ],
     license='MIT',

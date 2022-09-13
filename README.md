@@ -12,6 +12,8 @@
     * [6. Testing the Model](#6-testing-the-model)
     * [7. Re-train the Model with Full Data](#7-re-train-the-model-with-full-data)
     * [8. Using the Model](#8-using-the-model)
+  * [Downstream Analysis](#downstream-analysis)
+    * [Investigating Neighbour Group Relationships](#investigating-neighbour-group-relationships)
 
 
 ## Installation
@@ -19,7 +21,6 @@
 ```bash
 pip install git+https://github.com/bgrdessislava/NeighbourGroups.git
 ```
-
 
 ## Usage
 Neighbour Groups can be run from the command line and additional help is provided via ```ngroups --help```.
@@ -33,7 +34,6 @@ The following command will download the data and save it to the directory `./ana
 ```bash
 ngroups getData --dir data
 ```
-
 
 ### 2. Split Training and Testing Data
 The following command splits the example data into a training and testing data set.
@@ -52,7 +52,6 @@ For example, if the isolate ID is the second column (index 1) and the features a
 ngroups prepare analysis/example analysis/C.jejuni-UKisolates.csv \
   --IDcol 1 --features 2 3 --trainSize 0.8 --seed 42
 ```
-
 
 ### 3. Build Phylogenetic Trees
 Following splitting of the data the user must create **two** phylogenetic trees in newick format; this step must be performed externally.
@@ -77,7 +76,6 @@ The training tree is used to extract target Neigbour Groups and train the classi
 ```bash
 ngroups tree analysis/example data/C.jejuni-full.nwk data/C.jejuni-train.nwk
 ```
-
 
 ### 5. Training the Model
 After completing the previous sets the mode can be train as follows
@@ -110,11 +108,23 @@ ngroups train analysis/example 20 --full --seed 42
 
 ### 8. Using the Model
 Now the classifier is trained, it can be used on other data.
-The `ngroups predict` command requires a path to a CSV of data the trained model.
+The `ngroups predict` command requires a path to the data (CSV format) and the trained model.
 
-*Note: The column names of the CSV must match the column names used when training the model.*
+*Note: The header names of the CSV must include the features names used when training the model.*
 
 ```bash
 ngroups predict data/C.jejuni-UKisolates.csv analysis/example-20-final-trained.pkl \
   > C.jejuni-UKisolates-classified.csv
 ```
+
+## Downstream Analysis
+
+### Investigating Neighbour Group Relationships
+After training the final model (step 7) the `ngroups stats` command can be used to assess relationships between Neighbour Group clusters.
+This tool computes the mean distance between isolates of each pair of Neighbour Groups.
+A heatmap (SVG) and CSV file are written to `{prefix}-{nGroup}-meanNGdist.*`, as below.
+
+```bash
+ngroups stats analysis/example
+```
+![ngdist](./README_files/example-20-meanNGdist.svg)
