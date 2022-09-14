@@ -39,7 +39,7 @@ ngroups getData --dir data
 The following command splits the example data into a training and testing data set.
 The first argument of most `ngroups` commands is the `prefix` - this defines the directory and filename prefix of Neighbour Groups outputs
 For example, below each output file is prefixed with `./analysis/example` (e.g. `./analysis/example-test.csv`).
-*The prefix should be kept the same through a given analysis workflow.*
+The prefix should be kept the same through a given analysis workflow.
 
 ```bash
 ngroups prepare analysis/example analysis/C.jejuni-UKisolates.csv --trainSize 0.8 --seed 42
