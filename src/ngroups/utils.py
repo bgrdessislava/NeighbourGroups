@@ -74,7 +74,8 @@ def trainModel(data: pd.DataFrame, featureCols: list, seed: int = 42):
     model = Pipeline(steps=[
         ('columnTransform', featureTransformer),
         ('estimator',       CatBoostClassifier(
-            verbose=0, random_seed=seed, cat_features=featureIdx)),
+            verbose=0, random_seed=seed,
+            allow_writing_files=False, cat_features=featureIdx)),
     ])
     model = model.fit(X, y)
     return model
