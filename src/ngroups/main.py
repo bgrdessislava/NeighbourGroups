@@ -9,24 +9,26 @@ import pickle
 import logging
 import pandas as pd
 import seaborn as sns
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 
 
 def splitTestTrain(
-        prefix: str, data: str, IDcol: int = 0, features: list = None,
+        prefix: str, data: str, IDcol: None, features: list = None,
         missingVal: str = 'unknown', trainSize: float  = 0.8, seed: int = 42):
     if not (0 < trainSize < 1):
         logging.error(f'--trainSize {trainSize} not in range (0, 1).')
         return 1
-    if (features is not None) and (IDcol in features):
-        logging.error(f'Index columns {IDcol} cannot be a feature.')
-        return 1
     data = pd.read_csv(data).astype(str)
-    if features is None:
-        data = data.set_index(data.columns[IDcol])
-    else:
-        featureNames = [data.columns[i] for i in features]
-        data = data.set_index(data.columns[IDcol])[featureNames]
+    IDcol = data.columns[0] if IDcol is None else IDcol
+    data = data.set_index(IDcol)
+
+    if features is not None:
+        isValid = validColumns(data.columns, features, IDcol)
+        if not isValid:
+            return 1
+        else:
+            data = data[features]
 
     data.index = data.index.rename('id')
     data = data.fillna(missingVal)
@@ -37,6 +39,7 @@ def splitTestTrain(
             data, list(range(len(data))),
             train_size=trainSize, random_state=seed)
     )
+    os.makedirs(Path(prefix).parent, exist_ok=True)
     data.to_csv(f'{prefix}-full.csv')
     X_train.to_csv(f'{prefix}-train.csv')
     X_test.to_csv(f'{prefix}-test.csv')
@@ -150,6 +153,7 @@ def processNGdistances(data: pd.DataFrame, distances: pd.DataFrame, nGroup: int)
 
 def downloadExample(dir: str = '.'):
     """ Download example dataset from GitHub repo """
+    os.makedirs(dir, exist_ok=True)
     prefix = 'https://raw.githubusercontent.com/bgrdessislava/NeighbourGroups/main/data'
     download(f'{prefix}/C.jejuni-UKisolates.csv', dir)
     download(f'{prefix}/C.jejuni-full.nwk', dir)

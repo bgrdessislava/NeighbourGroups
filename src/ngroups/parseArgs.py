@@ -45,11 +45,11 @@ def parseArgs() -> argparse.Namespace:
         '--missingVal', default='unknown',
         help='Value to replace missing data (default: %(default)s)')
     sp1.add_argument(
-        '--IDcol', type=int, default=0,
+        '--IDcol',
         help='Column index (zero-based) of data corresponding to '
              'isolate ID (default: %(default)s)')
     sp1.add_argument(
-        '--features', type=int, nargs="+",
+        '--features', nargs="+",
         help='Column indices (zero-based) of training features. If not '
              'provided, all columns except index 0 are assumed to be '
              'training features')

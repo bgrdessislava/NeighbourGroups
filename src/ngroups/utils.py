@@ -148,3 +148,18 @@ def trainNG(
         data[f'NG{nGroup}'] = model.predict(data)
         data.index = data.index.rename('id')
         data.to_csv(f'{prefix}-{nGroup}-final.csv')
+
+
+def validColumns(cols, features, IDcol):
+    valid = True
+    if IDcol in features:
+        valid = False
+        logging.error(f'ID column ({IDcol}) cannot be a feature.')
+    if len(features) != len(set(features)):
+        valid = False
+        logging.error('Duplicates found in feature names')
+    for feature in features:
+        if feature not in cols:
+            valid = False
+            logging.error(f'{feature} not in input header.')
+    return valid
