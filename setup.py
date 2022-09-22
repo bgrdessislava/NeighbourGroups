@@ -42,7 +42,7 @@ setup(
         'numpy',
         'pandas',
         'seaborn',
-        'requests'
+        'requests',
         'catboost',
         'scikit-learn',
     ],
