@@ -158,7 +158,7 @@ def downloadExample(dir: str = '.'):
     download(f'{prefix}/C.jejuni-UKisolates.csv', dir)
     download(f'{prefix}/C.jejuni-full.nwk', dir)
     download(f'{prefix}/C.jejuni-train.nwk', dir)
-
+    download(f'{prefix}/C.jejuni-UKisolates-CC.csv', dir)
 
 def downloadModel(path: str = '.'):
     """ Download pre-trained model from publication. """
