@@ -29,7 +29,7 @@ The following commands can be used to reproduce the findings of the publication.
 
 ### 1. Download Publication Data
 The publication data can be downloaded as below or obtained directly from the [GitHub repository](https://github.com/bgrdessislava/NeighbourGroups/tree/main/data).
-The following command will download the data and save it to the directory `./output`.
+The following command will download the data and save it to the directory `./data`.
 
 ```bash
 ngroups getData --dir data
@@ -38,11 +38,11 @@ ngroups getData --dir data
 ### 2. Split Training and Testing Data
 The following command splits the example data into a training and testing data set.
 The first argument of most `ngroups` commands is the `prefix` - this defines the directory and filename prefix of Neighbour Groups outputs
-For example, below each output file is prefixed with `./output/example` (e.g. `./output/example-test.csv`).
+For example, below each output file is prefixed with `./example` (e.g. `./example-test.csv`).
 The prefix should be kept the same through a given analysis workflow.
 
 ```bash
-ngroups prepare output/example analysis/C.jejuni-UKisolates.csv --trainSize 0.8 --seed 42
+ngroups prepare example data/C.jejuni-UKisolates.csv --trainSize 0.8 --seed 42
 ```
 
 If required, the user can specify which columns correspond to the isolate ID and which correspond to the relevant training features.
@@ -50,7 +50,7 @@ For example, if the isolate ID is labelled `id` and we want to only use `aspA` a
 If no values are specified, the isolated ID is assumed to be the first column and all subsequent columns are treated as features.
 
 ```bash
-ngroups prepare output/example data/C.jejuni-UKisolates.csv \
+ngroups prepare example data/C.jejuni-UKisolates.csv \
   --IDcol id --features aspA glnA --trainSize 0.8 --seed 42
 ```
 
@@ -75,7 +75,7 @@ The training tree is used to extract target Neigbour Groups and train the classi
 ### 4. Pre-process the Trees
 
 ```bash
-ngroups tree output/example data/C.jejuni-full.nwk data/C.jejuni-train.nwk
+ngroups tree example data/C.jejuni-full.nwk data/C.jejuni-train.nwk
 ```
 
 ### 5. Training the Model
@@ -84,7 +84,7 @@ The number of Neighbour Groups to classify must be specified as positional argum
 Multiple Neighbour Group clusters can be provided to train different models at different tree hierarchy levels.
 
 ```bash
-ngroups train output/example 20 30 --seed 42
+ngroups train example 20 30 --seed 42
 ```
 
 ### 6. Testing the Model
@@ -92,7 +92,7 @@ Following training, the `ngroups test` command can be used to assess classifier 
 For each Neighbour Group (e.g. 20 and 30 above) an adjusted Rand index will be computed and written to stdout.
 
 ```bash
-ngroups test output/example > adjustedRandScores.csv
+ngroups test example > adjustedRandScores.csv
 ```
 
 ### 7. Re-train the Model with Full Data
@@ -104,7 +104,7 @@ For example, in the following command the model will be written to `./output/exa
 In addition, a final CSV final will be written to `{prefix}-{nGroup}-final.csv` which includes the NG predictions and original tree groups for all of the input data.
 
 ```bash
-ngroups train output/example 20 --full --seed 42
+ngroups train example 20 --full --seed 42
 ```
 
 ### 8. Using the Model
@@ -114,7 +114,7 @@ The `ngroups predict` command requires a path to the data (CSV format) and the t
 *Note: The header names of the CSV must include the features names used when training the model.*
 
 ```bash
-ngroups predict data/C.jejuni-UKisolates.csv output/example-20-final-trained.pkl \
+ngroups predict data/C.jejuni-UKisolates.csv example-20-final-trained.pkl \
   > C.jejuni-UKisolates-classified.csv
 ```
 
@@ -126,6 +126,6 @@ This tool computes the mean distance between isolates of each pair of Neighbour 
 A heatmap (SVG) and CSV file are written to `{prefix}-{nGroup}-meanNGdist.*`, as below.
 
 ```bash
-ngroups stats output/example
+ngroups stats example
 ```
 ![ngdist](./README_files/example-20-meanNGdist.svg)
