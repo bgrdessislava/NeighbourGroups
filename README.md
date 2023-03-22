@@ -56,7 +56,7 @@ ngroups prepare example data/C.jejuni-UKisolates.csv \
 
 ### 3. Build Phylogenetic Trees
 Following splitting of the data the user must create **two** phylogenetic trees in newick format; this step must be performed externally.
-The published methodology builds a Neighbour Joining (NJ) tree from the core MLST loci using [PubMLST](https://pubmlst.org/).
+The published methodology builds a Minnimum Spamming tree (MST) from the core MLST loci using [PubMLST](https://pubmlst.org/).
 However, in principle, any phylogenetic approach can be used.
 The key requirement is that the labels of the Newick trees match the corresponding isolate IDs of the full and training data set.
 
