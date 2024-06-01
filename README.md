@@ -63,12 +63,12 @@ The key requirement is that the labels of the Newick trees match the correspondi
 *Note: The example data download in step 1 already included pre-computed newick trees. If using the example data, skip to step 4.*
 
 #### Full Tree
-The first NJ tree is constructed from the full set of isolates - in the example these are saved to ``output/example-full.csv``.
+The first tree is constructed from the full set of isolates - in the example these are saved to ``output/example-full.csv``.
 The full tree will be used following model training to assess the prediction accuracy of the hold-out test set.
 In addition the full tree can later be used to re-train a final model on the full data set, following validation.
 
 #### Training Tree
-The second NJ tree is constructed from the training subset of isolates - in the example these are saved to ``output/example-train.csv``.
+The second tree is constructed from the training subset of isolates - in the example these are saved to ``output/example-train.csv``.
 The training tree is used to extract target Neigbour Groups and train the classifier model.
 
 
@@ -79,7 +79,7 @@ ngroups tree example data/C.jejuni-full.nwk data/C.jejuni-train.nwk
 ```
 
 ### 5. Training the Model
-After completing the previous sets the mode can be train as follows
+After completing the previous steps the mode can be trained as follows.
 The number of Neighbour Groups to classify must be specified as positional arguments following the prefix and a seed can be set for reproducibility.
 Multiple Neighbour Group clusters can be provided to train different models at different tree hierarchy levels.
 
@@ -99,7 +99,7 @@ ngroups test example > adjustedRandScores.csv
 Following testing, the model can be retrained using the full dataset.
 To retrain the model re-run the `ngroups train` command from step 5 with an additional `--full` flag.
 This will output a final trained model at the location `{prefix}-{nGroup}-final-trained.pkl`.
-For example, in the following command the model will be written to `./output/example-20-final-trained.pkl`
+For example, in the following command the model will be written to `./example-20-final-trained.pkl`
 
 In addition, a final CSV final will be written to `{prefix}-{nGroup}-final.csv` which includes the NG predictions and original tree groups for all of the input data.
 
